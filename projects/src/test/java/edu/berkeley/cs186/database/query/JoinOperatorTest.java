@@ -35,13 +35,184 @@ public class JoinOperatorTest {
   @Rule
   public TemporaryFolder tempFolder = new TemporaryFolder();
 
-  /**
-   *
-   */
   @Test
   @Category(StudentTestP2.class)
-  public void testSample() {
-    assertEquals(true, true);
+  public void testJoinPNLJSmallValues() throws QueryPlanException, DatabaseException, IOException {
+    TestSourceOperator sourceOperator = new TestSourceOperator(10);
+    File tempDir = tempFolder.newFolder("joinTest");
+    Database.Transaction transaction = new Database(tempDir.getAbsolutePath()).beginTransaction();
+    JoinOperator joinOperator = new PNLJOperator(sourceOperator, sourceOperator, "int", "int", transaction);
+
+    Iterator<Record> outputIterator = joinOperator.iterator();
+    int numRecords = 0;
+
+    List<DataType> expectedRecordValues = new ArrayList<DataType>();
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    Record expectedRecord = new Record(expectedRecordValues);
+
+    while (outputIterator.hasNext()) {
+      assertEquals(expectedRecord, outputIterator.next());
+      numRecords++;
+    }
+
+    assertEquals(100, numRecords);
+  }
+
+  @Test
+  @Category(StudentTestP2.class)
+  public void testJoinPNLJLargeValues() throws QueryPlanException, DatabaseException, IOException {
+    TestSourceOperator sourceOperator = new TestSourceOperator(1000);
+    File tempDir = tempFolder.newFolder("joinTest");
+    Database.Transaction transaction = new Database(tempDir.getAbsolutePath()).beginTransaction();
+    JoinOperator joinOperator = new PNLJOperator(sourceOperator, sourceOperator, "int", "int", transaction);
+
+    Iterator<Record> outputIterator = joinOperator.iterator();
+    int numRecords = 0;
+
+    List<DataType> expectedRecordValues = new ArrayList<DataType>();
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    Record expectedRecord = new Record(expectedRecordValues);
+
+    while (outputIterator.hasNext()) {
+      assertEquals(expectedRecord, outputIterator.next());
+      numRecords++;
+    }
+
+    assertEquals(1000000, numRecords);
+  }
+
+  @Test
+  @Category(StudentTestP2.class)
+  public void testJoinBLNJSmallValues() throws QueryPlanException, DatabaseException, IOException {
+    TestSourceOperator sourceOperator = new TestSourceOperator(10);
+    File tempDir = tempFolder.newFolder("joinTest");
+    Database.Transaction transaction = new Database(tempDir.getAbsolutePath()).beginTransaction();
+    JoinOperator joinOperator = new BNLJOperator(sourceOperator, sourceOperator, "int", "int", transaction);
+
+    Iterator<Record> outputIterator = joinOperator.iterator();
+    int numRecords = 0;
+
+    List<DataType> expectedRecordValues = new ArrayList<DataType>();
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    Record expectedRecord = new Record(expectedRecordValues);
+
+    while (outputIterator.hasNext()) {
+      assertEquals(expectedRecord, outputIterator.next());
+      numRecords++;
+    }
+
+    assertEquals(100, numRecords);
+  }
+
+  @Test
+  @Category(StudentTestP2.class)
+  public void testJoinBLNJLargeValues() throws QueryPlanException, DatabaseException, IOException {
+    TestSourceOperator sourceOperator = new TestSourceOperator(1000);
+    File tempDir = tempFolder.newFolder("joinTest");
+    Database.Transaction transaction = new Database(tempDir.getAbsolutePath()).beginTransaction();
+    JoinOperator joinOperator = new BNLJOperator(sourceOperator, sourceOperator, "int", "int", transaction);
+
+    Iterator<Record> outputIterator = joinOperator.iterator();
+    int numRecords = 0;
+
+    List<DataType> expectedRecordValues = new ArrayList<DataType>();
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    Record expectedRecord = new Record(expectedRecordValues);
+
+    while (outputIterator.hasNext()) {
+      assertEquals(expectedRecord, outputIterator.next());
+      numRecords++;
+    }
+
+    assertEquals(1000000, numRecords);
+  }
+
+  @Test
+  @Category(StudentTestP2.class)
+  public void testJoinGHJSmallValues() throws QueryPlanException, DatabaseException, IOException {
+    TestSourceOperator sourceOperator = new TestSourceOperator(10);
+    File tempDir = tempFolder.newFolder("joinTest");
+    Database.Transaction transaction = new Database(tempDir.getAbsolutePath()).beginTransaction();
+    JoinOperator joinOperator = new GraceHashOperator(sourceOperator, sourceOperator, "int", "int", transaction);
+
+    Iterator<Record> outputIterator = joinOperator.iterator();
+    int numRecords = 0;
+
+    List<DataType> expectedRecordValues = new ArrayList<DataType>();
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    Record expectedRecord = new Record(expectedRecordValues);
+
+    while (outputIterator.hasNext()) {
+      assertEquals(expectedRecord, outputIterator.next());
+      numRecords++;
+    }
+
+    assertEquals(100, numRecords);
+  }
+
+  @Test
+  @Category(StudentTestP2.class)
+  public void testJoinGHJLargeValues() throws QueryPlanException, DatabaseException, IOException {
+    TestSourceOperator sourceOperator = new TestSourceOperator(1000);
+    File tempDir = tempFolder.newFolder("joinTest");
+    Database.Transaction transaction = new Database(tempDir.getAbsolutePath()).beginTransaction();
+    JoinOperator joinOperator = new GraceHashOperator(sourceOperator, sourceOperator, "int", "int", transaction);
+
+    Iterator<Record> outputIterator = joinOperator.iterator();
+    int numRecords = 0;
+
+    List<DataType> expectedRecordValues = new ArrayList<DataType>();
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    expectedRecordValues.add(new BoolDataType(true));
+    expectedRecordValues.add(new IntDataType(1));
+    expectedRecordValues.add(new StringDataType("abcde", 5));
+    expectedRecordValues.add(new FloatDataType(1.2f));
+    Record expectedRecord = new Record(expectedRecordValues);
+
+    while (outputIterator.hasNext()) {
+      assertEquals(expectedRecord, outputIterator.next());
+      numRecords++;
+    }
+
+    assertEquals(1000000, numRecords);
   }
 
   @Test(timeout=5000)

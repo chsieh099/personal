@@ -13,6 +13,98 @@ import edu.berkeley.cs186.database.query.QueryPlan.PredicateOperator;
 
 public class IntHistogramTest {
 
+  @Test
+  @Category(StudentTestP2.class)
+  public void testComputeReductionFactorSmallValues() {
+    IntHistogram histogram = new IntHistogram();
+
+    for (int i = 0; i < 10; i++) {
+      histogram.addValue(i);
+      histogram.addValue(i);
+    }
+
+    assertEquals(10, histogram.getNumDistinct());
+
+    IntDataType equalsValue = new IntDataType(1);
+    assertEquals(0.1f,
+            histogram.computeReductionFactor(PredicateOperator.EQUALS,
+                    equalsValue),
+            0.001f);
+
+    IntDataType lessThanValue = new IntDataType(5);
+    assertEquals(0.5f,
+            histogram.computeReductionFactor(PredicateOperator.LESS_THAN,
+                    lessThanValue),
+            0.001f);
+
+    IntDataType lessThanEqualsValue = new IntDataType(5);
+    assertEquals(0.6f,
+            histogram.computeReductionFactor(PredicateOperator.LESS_THAN_EQUALS,
+                    lessThanEqualsValue),
+            0.001f);
+
+    IntDataType greaterThanValue = new IntDataType(7);
+    assertEquals(0.3f,
+            histogram.computeReductionFactor(PredicateOperator.GREATER_THAN,
+                    greaterThanValue),
+            0.001f);
+
+    IntDataType greaterThanEqualsValue = new IntDataType(7);
+    assertEquals(0.4f,
+            histogram.computeReductionFactor(PredicateOperator.GREATER_THAN_EQUALS,
+                    greaterThanEqualsValue),
+            0.001f);
+  }
+
+  @Test
+  @Category(StudentTestP2.class)
+  public void testComputeReductionFactorLargeValues() {
+    IntHistogram histogram = new IntHistogram();
+
+    for (int i = 0; i < 1000; i++) {
+      histogram.addValue(i);
+      histogram.addValue(i);
+    }
+
+    assertEquals(1000, histogram.getNumDistinct());
+
+    IntDataType equalsValue = new IntDataType(50);
+    assertEquals(0.001f,
+            histogram.computeReductionFactor(PredicateOperator.EQUALS,
+                    equalsValue),
+            0.001f);
+
+    IntDataType notEquals = new IntDataType(50);
+    assertEquals(0.999f,
+            histogram.computeReductionFactor(PredicateOperator.NOT_EQUALS,
+                    equalsValue),
+            0.001f);
+
+    IntDataType lessThanValue = new IntDataType(700);
+    assertEquals(0.546875f,
+            histogram.computeReductionFactor(PredicateOperator.LESS_THAN,
+                    lessThanValue),
+            0.001f);
+
+    IntDataType lessThanEqualsValue = new IntDataType(400);
+    assertEquals(0.3135f,
+            histogram.computeReductionFactor(PredicateOperator.LESS_THAN_EQUALS,
+                    lessThanEqualsValue),
+            0.001f);
+
+    IntDataType greaterThanValue = new IntDataType(600);
+    assertEquals(0.53125f,
+            histogram.computeReductionFactor(PredicateOperator.GREATER_THAN,
+                    greaterThanValue),
+            0.001f);
+
+    IntDataType greaterThanEqualsValue = new IntDataType(200);
+    assertEquals(0.84475f,
+            histogram.computeReductionFactor(PredicateOperator.GREATER_THAN_EQUALS,
+                    greaterThanEqualsValue),
+            0.001f);
+  }
+
   @Test(timeout=1000)
   public void testSimpleHistogram() {
     IntHistogram histogram = new IntHistogram();
