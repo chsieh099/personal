@@ -82,6 +82,66 @@ public class OptimalQueryPlanTest {
     assertEquals(true, true); // Do not actually write a test like this!
   }
 
+  @Test
+  @Category(StudentTestP2.class)
+  public void testSmallSelectResultIterator() throws DatabaseException, QueryPlanException {
+    Database.Transaction transaction = this.database.beginTransaction();
+    QueryPlan queryPlan = transaction.query(this.defaulTableName);
+
+    List<String> columnNames = new ArrayList<String>();
+    columnNames.add("int");
+
+    queryPlan.select(columnNames);
+    Iterator<Record> outputIterator = queryPlan.executeOptimal();
+
+    int count = 0;
+    while (outputIterator.hasNext()) {
+      Record record = outputIterator.next();
+      assertTrue(record.getValues().get(0) instanceof IntDataType);
+
+      count++;
+    }
+
+    assertEquals(this.defaultNumRecords, count);
+  }
+
+  @Test
+  @Category(StudentTestP2.class)
+  public void testLargeSelectResultIterator() throws DatabaseException, QueryPlanException {
+    Database.Transaction transaction = this.database.beginTransaction();
+    QueryPlan queryPlan = transaction.query(this.defaulTableName);
+
+    List<String> columnNames = new ArrayList<String>();
+    columnNames.add("int");
+    columnNames.add("string");
+    columnNames.add("int");
+    columnNames.add("string");
+    columnNames.add("int");
+    columnNames.add("string");
+    columnNames.add("int");
+    columnNames.add("string");
+
+    queryPlan.select(columnNames);
+    Iterator<Record> outputIterator = queryPlan.executeOptimal();
+
+    int count = 0;
+    while (outputIterator.hasNext()) {
+      Record record = outputIterator.next();
+      assertTrue(record.getValues().get(0) instanceof IntDataType);
+      assertTrue(record.getValues().get(1) instanceof StringDataType);
+      assertTrue(record.getValues().get(0) instanceof IntDataType);
+      assertTrue(record.getValues().get(1) instanceof StringDataType);
+      assertTrue(record.getValues().get(0) instanceof IntDataType);
+      assertTrue(record.getValues().get(1) instanceof StringDataType);
+      assertTrue(record.getValues().get(0) instanceof IntDataType);
+      assertTrue(record.getValues().get(1) instanceof StringDataType);
+
+      count++;
+    }
+
+    assertEquals(this.defaultNumRecords, count);
+  }
+
   @Test(timeout=1000)
   public void testSimpleSelectIterator() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
